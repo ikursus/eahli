@@ -11,6 +11,12 @@ Route::get('senarai-users/add', 'UserController@create');
 Route::post('senarai-users/add', 'UserController@store');
 # Papar borang untuk edit user
 Route::get('senarai-users/{id}', 'UserController@edit')->where('id', '[0-9]+');
+# Kemaskini rekod user
+Route::patch('senarai-users/{id}', 'UserController@update')->where('id', '[0-9]+');
+# Hapuskan rekod user
+Route::delete('senarai-users/{id}', 'UserController@destroy');
+
+
 
 Auth::routes();
 

@@ -49,13 +49,28 @@ class UserController extends Controller
       // ]);
 
       $request->validate([
-        'name' => 'required|min:3|alpha_dash',
+        'name' => 'required|min:3',
         'email' => 'required|email'
       ]);
 
-      $data = $request->all();
+      # Dapatkan data yang perlu kemaskini
+      $data = $request->only([
+        'name',
+        'email',
+        'phone',
+        'address',
+        'role',
+        'birthday'
+      ]);
 
-      return $data;
+      $data['password'] = bcrypt($request->input('password'));
+
+      # Simpan rekod dalam table users
+      DB::table('users')->insert($data);
+
+      # Redirect pengguna ke halaman senarai users
+      # return redirect('/senarai-users');
+      return redirect('/senarai-users');
     }
 
     /**
@@ -94,7 +109,36 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $request->validate([
+        'name' => 'required|min:3',
+        'email' => 'required|email'
+      ]);
+
+      # Dapatkan data yang perlu kemaskini
+      $data = $request->only([
+        'name',
+        'email',
+        'phone',
+        'address',
+        'role',
+        'birthday'
+      ]);
+
+      # Semak jika ruangan password tidak kosong
+      if ( !empty($request->input('password') ) )
+      {
+        $data['password'] = bcrypt($request->input('password'));
+      }
+
+      # Update rekod dalam table users berdasarkan ID
+      DB::table('users')
+      ->where('id', '=', $id)
+      ->update($data);
+
+      # Redirect pengguna ke halaman senarai users
+      # return redirect('/senarai-users');
+      return redirect()->back();
+
     }
 
     /**
@@ -105,6 +149,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+      # Update rekod dalam table users berdasarkan ID
+      DB::table('users')
+      ->where('id', '=', $id)
+      ->delete();
+
+      # return redirect('/senarai-users');
+      return redirect('/senarai-users');
     }
 }
