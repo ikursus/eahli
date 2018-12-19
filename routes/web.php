@@ -18,17 +18,17 @@ Route::patch('senarai-users/{id}', 'UserController@update')->where('id', '[0-9]+
 Route::delete('senarai-users/{id}', 'UserController@destroy');
 
 # Route untuk pengurusan payments
-Route::get('payments', 'PaymentController@index');
+Route::get('payments', 'PaymentController@index')->name('payments.index');
 # Halaman papar borang tambah user baru
-Route::get('payments/add', 'PaymentController@create');
+Route::get('payments/add', 'PaymentController@create')->name('payments.create');
 # Urus request untuk simpan rekod user baru ke DB
-Route::post('payments/add', 'PaymentController@store');
+Route::post('payments/add', 'PaymentController@store')->name('payments.store');
 # Papar borang untuk edit user
-Route::get('payments/{id}', 'PaymentController@edit')->where('id', '[0-9]+');
+Route::get('payments/{id}', 'PaymentController@edit')->where('id', '[0-9]+')->name('payments.edit');
 # Kemaskini rekod user
-Route::patch('payments/{id}', 'PaymentController@update')->where('id', '[0-9]+');
+Route::patch('payments/{id}', 'PaymentController@update')->where('id', '[0-9]+')->name('payments.update');
 # Hapuskan rekod user
-Route::delete('payments/{id}', 'PaymentController@destroy');
+Route::delete('payments/{id}', 'PaymentController@destroy')->name('payments.destroy');
 
 # Route untuk authentication
 Auth::routes();
