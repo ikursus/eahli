@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 
 class UserController extends Controller
 {
@@ -13,11 +14,13 @@ class UserController extends Controller
      */
      public function index()
      {
-       $senarai_users = [
-         ['id' => '1', 'nama' => 'Ali Bin Abu', 'email' => 'ali@abu.com'],
-         ['id' => '2', 'nama' => 'Ahmad Bin Albab', 'email' => 'ahmad@albab.com'],
-         ['id' => '3', 'nama' => 'Siti Nurhaliza', 'email' => 'siti@nurhaliza.com'],
-       ];
+       // $senarai_users = [
+       //   ['id' => '1', 'nama' => 'Ali Bin Abu', 'email' => 'ali@abu.com'],
+       //   ['id' => '2', 'nama' => 'Ahmad Bin Albab', 'email' => 'ahmad@albab.com'],
+       //   ['id' => '3', 'nama' => 'Siti Nurhaliza', 'email' => 'siti@nurhaliza.com'],
+       // ];
+       $senarai_users = DB::table('users')->paginate(2);
+
 
        return view('users.template_users', compact('senarai_users'));
      }
@@ -74,7 +77,12 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-      return 'Borang edit user ID: ' .$id;
+      # Panggil data user berdasar ID
+      $user = DB::table('users')
+      ->where('id', '=', $id)
+      ->first();
+
+      return view('users/template_edit_user', compact('user'));
     }
 
     /**

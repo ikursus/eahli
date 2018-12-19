@@ -30,16 +30,18 @@
       <tbody>
         @foreach( $senarai_users as $user )
         <tr>
-          <td>{{ $user['id'] }}</td>
-          <td>{{ $user['nama'] }}</td>
-          <td><?php echo $user['email']; ?></td>
+          <td>{{ $user->id }}</td>
+          <td>{{ $user->name }}</td>
+          <td>{{ $user->email }}</td>
           <td>
-            <a href="/senarai-users/<?php echo $user['id']; ?>" class="btn btn-primary">EDIT</a>
+            <a href="/senarai-users/{{ $user->id }}" class="btn btn-primary">EDIT</a>
           </td>
         </tr>
       @endforeach
       </tbody>
     </table>
+
+    {{ $senarai_users->links() }}
 
   </div>
 </div>
