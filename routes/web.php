@@ -30,6 +30,8 @@ Route::patch('payments/{id}', 'PaymentController@update')->where('id', '[0-9]+')
 # Hapuskan rekod user
 Route::delete('payments/{id}', 'PaymentController@destroy')->name('payments.destroy');
 
+Route::resource('memberships', 'MembershipController');
+
 # Route untuk authentication
 Auth::routes();
 

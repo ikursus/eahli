@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 
+use App\Payment;
+
 class PaymentController extends Controller
 {
     /**
@@ -14,7 +16,12 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = DB::table('payments')->paginate(2);
+        // $payments = DB::table('payments')
+        // ->join('users', 'payments.user_id', '=', 'users.id')
+        // ->select('payments.*', 'users.name')
+        // ->paginate(2);
+        $payments = Payment::paginate(2);
+
 
         return view('payments/index', compact('payments'));
     }
@@ -46,7 +53,8 @@ class PaymentController extends Controller
           'due_date' => 'required|date'
         ]);
 
-        DB::table('payments')->insert($data);
+        #DB::table('payments')->insert($data);
+        Payment::create($data);
 
         return redirect()->route('payments.index')->with('alert-success', 'Rekod berjaya ditambah');
     }
@@ -70,7 +78,8 @@ class PaymentController extends Controller
      */
     public function edit($id)
     {
-        $payment = DB::table('payments')->whereId($id)->first();
+        # $payment = DB::table('payments')->whereId($id)->first();
+        $payment = Payment::findOrFail($id);
 
         $users = DB::table('users')->select('id', 'name')->get();
 
@@ -86,16 +95,13 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-      $data = request()->validate([
-        'user_id' => 'required|integer',
-        'amount' => 'required|numeric',
-        'status' => 'required',
-        'due_date' => 'required|date'
-      ]);
+      $data = $request->all();
 
-      DB::table('payments')
-      ->whereId($id)
-      ->update($data);
+      // DB::table('payments')
+      // ->whereId($id)
+      // ->update($data);
+      $payment = Payment::findOrFail($id);
+      $payment->update($data);
 
       return redirect()->back()->with('alert-success', 'Rekod berjaya dikemaskini');
     }
@@ -108,9 +114,12 @@ class PaymentController extends Controller
      */
     public function destroy($id)
     {
-      DB::table('payments')
-      ->whereId($id)
-      ->delete();
+      // DB::table('payments')
+      // ->whereId($id)
+      // ->delete();
+
+      $payment = Payment::findOrFail($id);
+      $payment->delete();
 
       return redirect()->back()->with('alert-success', 'Rekod berjaya dihapuskan');
     }

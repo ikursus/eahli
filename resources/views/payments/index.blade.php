@@ -32,7 +32,7 @@
         @foreach( $payments as $payment )
         <tr>
           <td>{{ $payment->id }}</td>
-          <td>{{ $payment->user_id }}</td>
+          <td>{{ $payment->getUser->name }}</td>
           <td>{{ $payment->amount }}</td>
           <td>{{ $payment->due_date }}</td>
           <td>{{ $payment->status }}</td>
