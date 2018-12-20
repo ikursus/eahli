@@ -73,6 +73,14 @@
         </nav>
 
         <main class="py-4">
+            @if (session('mesej-success') )
+            <div class="container">
+            <div class="alert alert-success">
+              {{ session('mesej-success') }}
+            </div>
+            </div>
+            @endif
+
             @yield('content')
         </main>
     </div>

@@ -55,7 +55,7 @@ class UserController extends Controller
       ]);
 
       # Dapatkan data yang perlu kemaskini
-      $data = $request->all();
+      $data = $request->except('password');
 
       $data['password'] = bcrypt($request->input('password'));
 
@@ -107,7 +107,7 @@ class UserController extends Controller
       ]);
 
       # Dapatkan data yang perlu kemaskini
-      $data = $request->all();
+      $data = $request->except('password');
 
       # Semak jika ruangan password tidak kosong
       if ( !empty($request->input('password') ) )
@@ -121,7 +121,7 @@ class UserController extends Controller
 
       # Redirect pengguna ke halaman senarai users
       # return redirect('/senarai-users');
-      return redirect()->back();
+      return redirect()->back()->with('mesej-success', 'Rekod berjaya dikemaskini.');
 
     }
 
@@ -138,6 +138,6 @@ class UserController extends Controller
       $user->delete();
 
       # return redirect('/senarai-users');
-      return redirect('/senarai-users');
+      return redirect('/senarai-users')->with('mesej-success', 'Rekod telah berjaya dihapuskan!');
     }
 }
