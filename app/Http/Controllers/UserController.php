@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use App\User;
 
 class UserController extends Controller
 {
@@ -19,7 +20,7 @@ class UserController extends Controller
        //   ['id' => '2', 'nama' => 'Ahmad Bin Albab', 'email' => 'ahmad@albab.com'],
        //   ['id' => '3', 'nama' => 'Siti Nurhaliza', 'email' => 'siti@nurhaliza.com'],
        // ];
-       $senarai_users = DB::table('users')->paginate(2);
+       $senarai_users = User::paginate(2);
 
 
        return view('users.template_users', compact('senarai_users'));
@@ -54,19 +55,12 @@ class UserController extends Controller
       ]);
 
       # Dapatkan data yang perlu kemaskini
-      $data = $request->only([
-        'name',
-        'email',
-        'phone',
-        'address',
-        'role',
-        'birthday'
-      ]);
+      $data = $request->all();
 
       $data['password'] = bcrypt($request->input('password'));
 
       # Simpan rekod dalam table users
-      DB::table('users')->insert($data);
+      User::create($data);
 
       # Redirect pengguna ke halaman senarai users
       # return redirect('/senarai-users');
@@ -93,9 +87,7 @@ class UserController extends Controller
     public function edit($id)
     {
       # Panggil data user berdasar ID
-      $user = DB::table('users')
-      ->where('id', '=', $id)
-      ->first();
+      $user = User::findOrFail($id);
 
       return view('users/template_edit_user', compact('user'));
     }
@@ -115,14 +107,7 @@ class UserController extends Controller
       ]);
 
       # Dapatkan data yang perlu kemaskini
-      $data = $request->only([
-        'name',
-        'email',
-        'phone',
-        'address',
-        'role',
-        'birthday'
-      ]);
+      $data = $request->all();
 
       # Semak jika ruangan password tidak kosong
       if ( !empty($request->input('password') ) )
@@ -131,9 +116,8 @@ class UserController extends Controller
       }
 
       # Update rekod dalam table users berdasarkan ID
-      DB::table('users')
-      ->where('id', '=', $id)
-      ->update($data);
+      $user = User::findOrFail($id);
+      $user->update($data);
 
       # Redirect pengguna ke halaman senarai users
       # return redirect('/senarai-users');
@@ -150,9 +134,8 @@ class UserController extends Controller
     public function destroy($id)
     {
       # Update rekod dalam table users berdasarkan ID
-      DB::table('users')
-      ->where('id', '=', $id)
-      ->delete();
+      $user = User::findOrFail($id);
+      $user->delete();
 
       # return redirect('/senarai-users');
       return redirect('/senarai-users');
